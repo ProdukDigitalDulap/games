@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Quest: Kisi-Kisi Informatika Kelas 7</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #111827;
+      --neon-cyan: #06b6d4;
+      --neon-purple: #8b5cf6;
+      --neon-emerald: #10b981;
+      --neon-amber: #f59e0b;
+      --neon-rose: #f43f5e;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: #f8fafc;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(6, 182, 212, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.14) 0%, transparent 40%),
+        linear-gradient(rgba(15, 23, 42, 0.9), rgba(9, 13, 22, 0.96));
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Efek Grid Cyber Halus di Latar */
+    .cyber-grid {
+      background-size: 36px 36px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    }
+
+    /* Glassmorphism Card */
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Animasi Getar saat Jawaban Salah */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: shake 0.42s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    /* Animasi Pop saat Jawaban Benar */
+    @keyframes popIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      70% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.35s ease-out forwards;
+    }
+
+    /* Glow Button */
+    .btn-cyber {
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-cyber:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.45);
+    }
+    .btn-cyber:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    /* Opsi Jawaban Hover */
+    .option-card {
+      transition: all 0.18s ease;
+    }
+    .option-card:hover:not(:disabled) {
+      border-color: rgba(34, 211, 238, 0.65);
+      background: rgba(30, 41, 59, 0.92);
+      transform: translateX(4px);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Print Styling untuk Sertifikat */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #certificate-area, #certificate-area * {
+        visibility: visible;
+      }
+      #certificate-area {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #0f172a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body class="cyber-grid selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- Canvas Konfeti untuk Selebrasi -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Toast Notifikasi Ringan -->
+  <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden">
+    <div id="toast-content" class="px-5 py-3 rounded-2xl bg-slate-800 border border-cyan-500/40 text-sm font-semibold text-cyan-200 shadow-2xl flex items-center gap-2"></div>
+  </div>
+
+  <!-- Header Navigasi Atas -->
+  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="confirmReturnHome()">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-bold text-base sm:text-lg tracking-tight bg-gradient-to-r from-cyan-300 via-sky-200 to-purple-300 bg-clip-text text-transparent">
+            CYBER QUEST 7
+          </span>
+          <p class="text-[11px] text-slate-400 leading-none">Kisi-Kisi Informatika Kurikulum Merdeka</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Info Pemain Aktif -->
+        <div id="header-player-badge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700/70 text-xs">
+          <span id="header-avatar" class="text-base">🤖</span>
+          <span id="header-name" class="font-semibold text-slate-200">Siswa</span>
+          <span id="header-class" class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">7A</span>
+        </div>
+
+        <!-- Toggle Suara -->
+        <button id="btn-sound-toggle" onclick="toggleSound()" title="Suara Efek" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/70 text-slate-200 transition">
+          <span id="sound-icon" class="text-base">🔊</span>
+        </button>
+
+        <!-- Tombol Kembali ke Lobi -->
+        <button id="btn-home" onclick="confirmReturnHome()" class="hidden px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/70 text-xs font-semibold text-slate-300 transition">
+          🏠 Lobi
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Kontainer Utama -->
+  <main class="max-w-5xl mx-auto px-4 py-6 sm:py-8">
+
+    <!-- ========================================================= -->
+    <!-- SCREEN 1: LAYAR MULAI & PENDAFTARAN PEMAIN                -->
+    <!-- ========================================================= -->
+    <section id="screen-start" class="animate-pop">
+      <div class="glass-panel rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <!-- Kolom Kiri: Sambutan & Konsep -->
+          <div class="lg:col-span-7 space-y-5">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-bold tracking-wide uppercase">
+              <span>⚡ Misi Persiapan UAS SMP Kelas 7</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white">
+              Taklukkan Ujian <span class="bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">Informatika</span> Lewat Petualangan!
+            </h1>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Latih pemahamanmu tentang <strong>Sejarah Informatika</strong>, <strong>Sistem Komputer</strong>, dan <strong>Berpikir Komputasional</strong> lewat 30 soal cerita seru, diagram visual interaktif, dan mini-game pencocokan cepat!
+            </p>
+
+            <!-- Sorotan Fitur -->
+            <div class="grid grid-cols-3 gap-3 pt-2">
+              <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
+                <div class="text-2xl mb-1">🕰️</div>
+                <div class="text-xs font-bold text-cyan-300">Zona 1</div>
+                <div class="text-[11px] text-slate-400">Sejarah TIK</div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
+                <div class="text-2xl mb-1">🖥️</div>
+                <div class="text-xs font-bold text-purple-300">Zona 2</div>
+                <div class="text-[11px] text-slate-400">Sistem Komputer</div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
+                <div class="text-2xl mb-1">🧠</div>
+                <div class="text-xs font-bold text-emerald-300">Zona 3</div>
+                <div class="text-[11px] text-slate-400">Logika & CT</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Form Profil Pemain -->
+          <div class="lg:col-span-5">
+            <div class="bg-slate-900/90 border border-slate-700/80 rounded-3xl p-6 space-y-5 shadow-xl">
+              <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>🪪</span> Profil Cyber Agent
+              </h2>
+
+              <!-- Pilih Avatar -->
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Pilih Avatar Karakter</label>
+                <div class="grid grid-cols-5 gap-2" id="avatar-selector">
+                  <button type="button" data-avatar="🤖" class="avatar-btn active p-2.5 rounded-2xl bg-cyan-500/20 border-2 border-cyan-400 text-2xl flex items-center justify-center transition">🤖</button>
+                  <button type="button" data-avatar="👩‍💻" class="avatar-btn p-2.5 rounded-2xl bg-slate-800/80 border-2 border-transparent hover:border-slate-600 text-2xl flex items-center justify-center transition">👩‍💻</button>
+                  <button type="button" data-avatar="👨‍🚀" class="avatar-btn p-2.5 rounded-2xl bg-slate-800/80 border-2 border-transparent hover:border-slate-600 text-2xl flex items-center justify-center transition">👨‍🚀</button>
+                  <button type="button" data-avatar="🦊" class="avatar-btn p-2.5 rounded-2xl bg-slate-800/80 border-2 border-transparent hover:border-slate-600 text-2xl flex items-center justify-center transition">🦊</button>
+                  <button type="button" data-avatar="⚡" class="avatar-btn p-2.5 rounded-2xl bg-slate-800/80 border-2 border-transparent hover:border-slate-600 text-2xl flex items-center justify-center transition">⚡</button>
+                </div>
+              </div>
+
+              <!-- Nama Siswa -->
+              <div>
+                <label for="input-name" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Nama Lengkap Siswa</label>
+                <input id="input-name" type="text" maxlength="28" placeholder="Contoh: Raka Pratama" class="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 transition" />
+              </div>
+
+              <!-- Kelas -->
+              <div>
+                <label for="input-class" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Kelas</label>
+                <select id="input-class" class="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400 transition">
+                  <option value="7A">Kelas 7A</option>
+                  <option value="7B">Kelas 7B</option>
+                  <option value="7C">Kelas 7C</option>
+                  <option value="7D">Kelas 7D</option>
+                  <option value="7E">Kelas 7E</option>
+                  <option value="7F">Kelas 7F</option>
+                  <option value="7G">Kelas 7G</option>
+                  <option value="7H">Kelas 7H</option>
+                  <option value="SMP-7">Kelas 7 Umum</option>
+                </select>
+              </div>
+
+              <!-- Mode Waktu -->
+              <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
+                <div>
+                  <div class="text-xs font-bold text-slate-200">⏱️ Mode Timer Tantangan</div>
+                  <div class="text-[11px] text-slate-400">Aktifkan hitung mundur 35 detik/soal</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="toggle-timer" class="sr-only peer" checked />
+                  <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-500"></div>
+                </label>
+              </div>
+
+              <button onclick="enterLobby()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-cyan-500/25 btn-cyber flex items-center justify-center gap-2">
+                <span>Masuk ke Arena Misi</span>
+                <span>🚀</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SCREEN 2: LOBI PEMILIHAN ZONA & MINI-GAME                 -->
+    <!-- ========================================================= -->
+    <section id="screen-lobby" class="hidden space-y-6 animate-pop">
+      <!-- Banner Status Pemain -->
+      <div class="glass-panel rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div id="lobby-avatar" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-400/40 flex items-center justify-center text-3xl">🤖</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 id="lobby-player-name" class="text-xl font-bold text-white">Cyber Agent</h2>
+              <span id="lobby-player-class" class="px-2.5 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 text-xs font-bold">7A</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Pilih zona latihan di bawah atau taklukkan semua misi untuk membuka gelar tertinggi!</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end bg-slate-950/70 px-4 py-2.5 rounded-2xl border border-slate-800">
+          <div class="text-center">
+            <div class="text-[11px] text-slate-400 uppercase font-semibold">Total Poin</div>
+            <div id="lobby-total-points" class="text-lg font-extrabold text-amber-400">0</div>
+          </div>
+          <div class="h-8 w-px bg-slate-800"></div>
+          <div class="text-center">
+            <div class="text-[11px] text-slate-400 uppercase font-semibold">Zona Selesai</div>
+            <div id="lobby-completed-count" class="text-lg font-extrabold text-emerald-400">0 / 4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid Kartu Zona Belajar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Zona 1 -->
+        <div class="glass-panel rounded-3xl p-6 border-t-4 border-t-cyan-400 flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 text-xs font-bold">ZONA 1 • 10 SOAL</span>
+              <span id="badge-zone-1" class="text-xs font-semibold text-slate-400">Belum Dimainkan</span>
+            </div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>🕰️</span> Mesin Waktu Informatika
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Jelajahi evolusi alat hitung Pascaline, mesin Babbage, pemrogram pertama Ada Lovelace, hingga generasi tabung vakum sampai mikroprosesor modern.
+            </p>
+          </div>
+          <button onclick="startQuiz('sejarah')" class="w-full py-3 px-4 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 border border-cyan-500/40 font-bold text-sm transition flex items-center justify-center gap-2">
+            <span>Mulai Zona 1</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+        <!-- Zona 2 -->
+        <div class="glass-panel rounded-3xl p-6 border-t-4 border-t-purple-400 flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-purple-500/15 text-purple-300 text-xs font-bold">ZONA 2 • 10 SOAL</span>
+              <span id="badge-zone-2" class="text-xs font-semibold text-slate-400">Belum Dimainkan</span>
+            </div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>🖥️</span> Ekosistem Sistem Komputer
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Kuasai interaksi Hardware, Software & Brainware, fungsi ALU/CU di dalam CPU, siklus IPOS, rahasia memori RAM vs ROM, ekstensi file, hingga keamanan siber.
+            </p>
+          </div>
+          <button onclick="startQuiz('sistem')" class="w-full py-3 px-4 rounded-2xl bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 font-bold text-sm transition flex items-center justify-center gap-2">
+            <span>Mulai Zona 2</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+        <!-- Zona 3 -->
+        <div class="glass-panel rounded-3xl p-6 border-t-4 border-t-emerald-400 flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold">ZONA 3 • 10 SOAL</span>
+              <span id="badge-zone-3" class="text-xs font-semibold text-slate-400">Belum Dimainkan</span>
+            </div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>🧠</span> Arena Logika Komputasional
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Pecahkan studi kasus menggunakan 4 pilar berpikir komputasional (Dekomposisi, Pola, Abstraksi, Algoritma), antrean Queue vs Stack, dan simbol Flowchart.
+            </p>
+          </div>
+          <button onclick="startQuiz('berpikir')" class="w-full py-3 px-4 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/40 font-bold text-sm transition flex items-center justify-center gap-2">
+            <span>Mulai Zona 3</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+        <!-- Boss Battle & Mini Game -->
+        <div class="glass-panel rounded-3xl p-6 border-t-4 border-t-amber-400 flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 text-xs font-bold">SIMULASI & MINI-GAME</span>
+              <span id="badge-zone-boss" class="text-xs font-semibold text-amber-300">🔥 Tantangan Ekstra</span>
+            </div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>🏆</span> Simulasi UAS & Duel Pasang Konsep
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Uji kesiapan akhir dengan 15 soal acak gabungan seluruh materi atau mainkan Mini-Game mencocokkan pasangan istilah TIK berkecepatan tinggi!
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button onclick="startQuiz('boss')" class="py-3 px-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20">
+              <span>⚔️ Simulasi 15 Soal</span>
+            </button>
+            <button onclick="startMatchGame()" class="py-3 px-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+              <span>⚡ Duel Cocokkan</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SCREEN 3: ARENA KUIS INTERAKTIF                           -->
+    <!-- ========================================================= -->
+    <section id="screen-quiz" class="hidden space-y-5">
+      <!-- Bar Status Game (Nyawa, Skor, Combo, Timer) -->
+      <div class="glass-panel rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <!-- Nyawa & Topik -->
+        <div class="flex items-center gap-3">
+          <div id="lives-display" class="flex items-center gap-1 text-lg" title="Nyawa Tersisa">
+            <span>❤️</span><span>❤️</span><span>❤️</span>
+          </div>
+          <span class="h-5 w-px bg-slate-700"></span>
+          <span id="quiz-zone-label" class="text-xs sm:text-sm font-bold text-cyan-300">Zona 1: Sejarah Informatika</span>
+        </div>
+
+        <!-- Progres & Timer & Skor -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <!-- Streak Badge -->
+          <div id="streak-badge" class="hidden px-2.5 py-1 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-extrabold animate-bounce">
+            🔥 <span id="streak-count">2</span>x Combo!
+          </div>
+
+          <!-- Timer -->
+          <div id="timer-box" class="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-slate-200">
+            <span>⏱️</span>
+            <span id="timer-text">35</span>d
+          </div>
+
+          <!-- Skor -->
+          <div class="px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs sm:text-sm font-extrabold">
+            ⭐ <span id="quiz-score">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar Soal -->
+      <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+        <div id="quiz-progress-bar" class="bg-gradient-to-r from-cyan-400 via-purple-500 to-emerald-400 h-full transition-all duration-300" style="width: 10%"></div>
+      </div>
+
+      <!-- Kartu Pertanyaan Utama -->
+      <div id="question-card" class="glass-panel rounded-3xl p-5 sm:p-8 space-y-6">
+        <div class="flex items-center justify-between">
+          <span id="question-number-badge" class="px-3 py-1 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">
+            Soal 1 dari 10
+          </span>
+          <span id="question-concept-tag" class="px-3 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-semibold">
+            Kisi-Kisi: Tokoh Komputasi
+          </span>
+        </div>
+
+        <!-- Kontainer Ilustrasi SVG (Muncul jika soal punya diagram) -->
+        <div id="question-svg-container" class="hidden rounded-2xl bg-slate-950/90 border border-slate-800 p-4 flex justify-center items-center overflow-x-auto"></div>
+
+        <!-- Kotak Ilustrasi Cerita / Konteks (Muncul jika soal punya cerita) -->
+        <div id="question-story-box" class="hidden rounded-2xl bg-slate-900/90 border-l-4 border-l-cyan-400 p-4 text-xs sm:text-sm text-slate-300 leading-relaxed"></div>
+
+        <!-- Teks Pertanyaan -->
+        <h2 id="question-text" class="text-base sm:text-xl font-bold text-white leading-snug">
+          Memuat pertanyaan...
+        </h2>
+
+        <!-- Daftar Opsi Jawaban -->
+        <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+
+        <!-- Kotak Bedah Konsep (Muncul setelah menjawab) -->
+        <div id="feedback-panel" class="hidden rounded-2xl p-4 sm:p-5 border space-y-3 animate-pop">
+          <div class="flex items-center justify-between">
+            <div id="feedback-status" class="font-extrabold text-base flex items-center gap-2"></div>
+            <span id="feedback-points" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-900"></span>
+          </div>
+          <p id="feedback-explanation" class="text-xs sm:text-sm text-slate-200 leading-relaxed"></p>
+          <div class="pt-1 flex justify-end">
+            <button id="btn-next-question" onclick="nextQuestion()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-xs sm:text-sm btn-cyber flex items-center gap-2">
+              <span>Lanjut Soal Berikutnya</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SCREEN 4: MINI-GAME DUEL PASANG KONSEP KILAT              -->
+    <!-- ========================================================= -->
+    <section id="screen-match" class="hidden space-y-5 animate-pop">
+      <div class="glass-panel rounded-3xl p-5 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold">⚡ MINI-GAME KILAT</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-white mt-1">Duel Pasang Konsep Informatika</h2>
+            <p class="text-xs text-slate-400">Klik 1 kartu <strong>Istilah</strong> di kiri, lalu klik 1 kartu <strong>Penjelasan</strong> yang cocok di kanan!</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="px-4 py-2 rounded-2xl bg-slate-900 border border-slate-700 text-center">
+              <div class="text-[10px] text-slate-400 uppercase font-bold">Waktu</div>
+              <div id="match-timer" class="text-lg font-extrabold text-cyan-400">60d</div>
+            </div>
+            <div class="px-4 py-2 rounded-2xl bg-slate-900 border border-slate-700 text-center">
+              <div class="text-[10px] text-slate-400 uppercase font-bold">Skor</div>
+              <div id="match-score" class="text-lg font-extrabold text-emerald-400">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Papan Pasangan 2 Kolom -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div class="space-y-2.5">
+            <div class="text-xs font-bold text-cyan-300 uppercase tracking-wider px-1">🔹 Kartu Istilah / Komponen</div>
+            <div id="match-left-col" class="space-y-2.5"></div>
+          </div>
+          <div class="space-y-2.5">
+            <div class="text-xs font-bold text-purple-300 uppercase tracking-wider px-1">🔸 Kartu Fungsi / Pengertian</div>
+            <div id="match-right-col" class="space-y-2.5"></div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center pt-2">
+          <button onclick="returnToLobby()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">
+            ← Kembali ke Lobi
+          </button>
+          <button onclick="startMatchGame()" class="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-xs font-bold">
+            🔄 Acak Kartu Baru
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SCREEN 5: LAYAR HASIL AKHIR & SERTIFIKAT                  -->
+    <!-- ========================================================= -->
+    <section id="screen-result" class="hidden space-y-6 animate-pop">
+      <!-- Kartu Sertifikat Pencapaian -->
+      <div id="certificate-area" class="glass-panel rounded-3xl p-6 sm:p-10 border-2 border-cyan-500/30 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-cyan-500/15 to-transparent rounded-bl-full pointer-events-none"></div>
+
+        <div class="text-center space-y-3 max-w-2xl mx-auto">
+          <div id="result-trophy" class="text-5xl sm:text-6xl mb-2">🏆</div>
+          <span class="px-4 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-extrabold uppercase tracking-widest">
+            Sertifikat Kelulusan Latihan Kisi-Kisi
+          </span>
+          <h2 id="result-rank-title" class="text-2xl sm:text-4xl font-extrabold text-white">
+            Grandmaster Informatika
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300">
+            Diberikan kepada <strong id="cert-player-name" class="text-cyan-300 text-base">Nama Siswa</strong> (<span id="cert-player-class" class="font-bold text-purple-300">Kelas 7A</span>) atas keberhasilan menyelesaikan misi latihan Informatika SMP Kurikulum Merdeka.
+          </p>
+        </div>
+
+        <!-- Statistik Ringkas -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 my-7">
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+            <div class="text-xs text-slate-400 font-semibold">Skor Misi</div>
+            <div id="res-score" class="text-2xl font-extrabold text-amber-400 mt-1">0</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+            <div class="text-xs text-slate-400 font-semibold">Akurasi</div>
+            <div id="res-accuracy" class="text-2xl font-extrabold text-emerald-400 mt-1">0%</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+            <div class="text-xs text-slate-400 font-semibold">Jawaban Benar</div>
+            <div id="res-correct" class="text-2xl font-extrabold text-cyan-400 mt-1">0/10</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+            <div class="text-xs text-slate-400 font-semibold">Max Combo</div>
+            <div id="res-streak" class="text-2xl font-extrabold text-purple-400 mt-1">0x</div>
+          </div>
+        </div>
+
+        <!-- Analisis Penguasaan per Topik -->
+        <div class="bg-slate-950/75 rounded-2xl p-5 border border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+            <span>📊</span> Peta Penguasaan Materi Kisi-Kisi
+          </h3>
+          <div class="space-y-3 text-xs">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-cyan-300 font-semibold">1. Sejarah Informatika</span>
+                <span id="stat-sejarah-text" class="text-slate-400 font-bold">Belum diuji</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="stat-sejarah-bar" class="bg-cyan-400 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-purple-300 font-semibold">2. Sistem Komputer</span>
+                <span id="stat-sistem-text" class="text-slate-400 font-bold">Belum diuji</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="stat-sistem-bar" class="bg-purple-400 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-emerald-300 font-semibold">3. Berpikir Komputasional</span>
+                <span id="stat-berpikir-text" class="text-slate-400 font-bold">Belum diuji</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="stat-berpikir-bar" class="bg-emerald-400 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tombol Aksi Lanjutan -->
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <button id="btn-retry-wrong" onclick="retryWrongQuestions()" class="hidden px-5 py-3 rounded-2xl bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/40 font-bold text-xs sm:text-sm transition flex items-center gap-2">
+          <span>🔁 Ulangi Soal yang Salah (<span id="wrong-count">0</span>)</span>
+        </button>
+
+        <button onclick="window.print()" class="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm transition flex items-center gap-2">
+          <span>🖨️ Cetak / Simpan Sertifikat</span>
+        </button>
+
+        <button onclick="returnToLobby()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-xs sm:text-sm btn-cyber flex items-center gap-2">
+          <span>🏠 Pilih Zona Lainnya</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- JAVASCRIPT: BANK SOAL, DIAGRAM SVG, AUDIO & GAME ENGINE   -->
+  <!-- ========================================================= -->
+  <script>
+    // =========================================================================
+    // 1. DIAGRAM SVG INTERAKTIF BAWAAN (TANPA DEPENDENSI GAMBAR EKSTERNAL)
+    // =========================================================================
+    const SVG_DIAGRAMS = {
+      generasi: `
+        <svg viewBox="0 0 680 155" class="w-full max-w-2xl h-auto" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="672" height="147" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+          <text x="340" y="26" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="1">LINI MASA EVOLUSI KOMPONEN KOMPUTER</text>
+          <!-- Gen 1 -->
+          <rect x="18" y="40" width="144" height="98" rx="10" fill="#450a0a" stroke="#f43f5e" stroke-width="1.8"/>
+          <text x="90" y="62" text-anchor="middle" fill="#fda4af" font-size="11" font-weight="800">GENERASI 1</text>
+          <text x="90" y="84" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Tabung Vakum</text>
+          <text x="90" y="102" text-anchor="middle" fill="#cbd5e1" font-size="10">(Vacuum Tube)</text>
+          <text x="90" y="122" text-anchor="middle" fill="#fca5a5" font-size="9">Besar & Cepat Panas</text>
+          <path d="M164 89 L182 89" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+          <!-- Gen 2 -->
+          <rect x="186" y="40" width="144" height="98" rx="10" fill="#451a03" stroke="#f59e0b" stroke-width="1.8"/>
+          <text x="258" y="62" text-anchor="middle" fill="#fcd34d" font-size="11" font-weight="800">GENERASI 2</text>
+          <text x="258" y="84" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Transistor</text>
+          <text x="258" y="102" text-anchor="middle" fill="#cbd5e1" font-size="10">Semikonduktor</text>
+          <text x="258" y="122" text-anchor="middle" fill="#fde68a" font-size="9">Lebih Kecil & Hemat</text>
+          <path d="M332 89 L350 89" stroke="#38bdf8" stroke-width="2.5"/>
+          <!-- Gen 3 -->
+          <rect x="354" y="40" width="144" height="98" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.8"/>
+          <text x="426" y="62" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="800">GENERASI 3</text>
+          <text x="426" y="84" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Chip IC</text>
+          <text x="426" y="102" text-anchor="middle" fill="#cbd5e1" font-size="10">(Integrated Circuit)</text>
+          <text x="426" y="122" text-anchor="middle" fill="#a7f3d0" font-size="9">Multitasking Awal</text>
+          <path d="M500 89 L518 89" stroke="#38bdf8" stroke-width="2.5"/>
+          <!-- Gen 4 -->
+          <rect x="522" y="40" width="140" height="98" rx="10" fill="#172554" stroke="#3b82f6" stroke-width="1.8"/>
+          <text x="592" y="62" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="800">GENERASI 4</text>
+          <text x="592" y="84" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Mikroprosesor</text>
+          <text x="592" y="102" text-anchor="middle" fill="#cbd5e1" font-size="10">(VLSI Chip)</text>
+          <text x="592" y="122" text-anchor="middle" fill="#bfdbfe" font-size="9">Era Laptop & PC</text>
+        </svg>
+      `,
+      cpu: `
+        <svg viewBox="0 0 640 190" class="w-full max-w-xl h-auto" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="632" height="182" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+          <!-- Input -->
+          <rect x="20" y="55" width="130" height="75" rx="10" fill="#0c4a6e" stroke="#06b6d4" stroke-width="2"/>
+          <text x="85" y="88" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="800">INPUT</text>
+          <text x="85" y="106" text-anchor="middle" fill="#e2e8f0" font-size="10">Keyboard, Mouse</text>
+          <path d="M152 92 L188 92" stroke="#38bdf8" stroke-width="3"/>
+          <!-- CPU Box -->
+          <rect x="192" y="18" width="256" height="145" rx="12" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="2.2"/>
+          <text x="320" y="38" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="800">CPU (OTAK KOMPUTER)</text>
+          <!-- CU -->
+          <rect x="210" y="48" width="220" height="46" rx="8" fill="#312e81" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="320" y="68" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Control Unit (CU)</text>
+          <text x="320" y="84" text-anchor="middle" fill="#cbd5e1" font-size="10">Mengatur Lalu Lintas Data & Instruksi</text>
+          <!-- ALU -->
+          <rect x="210" y="104" width="220" height="46" rx="8" fill="#4c1d95" stroke="#f472b6" stroke-width="1.5"/>
+          <text x="320" y="124" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Arithmetic Logic Unit (ALU)</text>
+          <text x="320" y="140" text-anchor="middle" fill="#fbcfe8" font-size="10">Hitung Matematika & Logika</text>
+          <!-- Output -->
+          <path d="M450 92 L486 92" stroke="#10b981" stroke-width="3"/>
+          <rect x="490" y="55" width="130" height="75" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+          <text x="555" y="88" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="800">OUTPUT</text>
+          <text x="555" y="106" text-anchor="middle" fill="#e2e8f0" font-size="10">Monitor, Printer</text>
+        </svg>
+      `,
+      ipos: `
+        <svg viewBox="0 0 660 130" class="w-full max-w-2xl h-auto" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="652" height="122" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+          <!-- Step 1 -->
+          <rect x="18" y="24" width="136" height="82" rx="10" fill="#0c4a6e" stroke="#38bdf8" stroke-width="2"/>
+          <text x="86" y="52" text-anchor="middle" fill="#7dd3fc" font-size="12" font-weight="800">1. INPUT</text>
+          <text x="86" y="72" text-anchor="middle" fill="#f1f5f9" font-size="10">Scanner, Mic,</text>
+          <text x="86" y="86" text-anchor="middle" fill="#f1f5f9" font-size="10">Keyboard</text>
+          <text x="167" y="70" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="800">➔</text>
+          <!-- Step 2 -->
+          <rect x="180" y="24" width="136" height="82" rx="10" fill="#3b0764" stroke="#c084fc" stroke-width="2"/>
+          <text x="248" y="52" text-anchor="middle" fill="#e9d5ff" font-size="12" font-weight="800">2. PROCESS</text>
+          <text x="248" y="72" text-anchor="middle" fill="#f1f5f9" font-size="10">Processor CPU</text>
+          <text x="248" y="86" text-anchor="middle" fill="#f1f5f9" font-size="10">& Motherboard</text>
+          <text x="329" y="70" text-anchor="middle" fill="#c084fc" font-size="16" font-weight="800">➔</text>
+          <!-- Step 3 -->
+          <rect x="342" y="24" width="136" height="82" rx="10" fill="#064e3b" stroke="#34d399" stroke-width="2"/>
+          <text x="410" y="52" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="800">3. OUTPUT</text>
+          <text x="410" y="72" text-anchor="middle" fill="#f1f5f9" font-size="10">Monitor, Speaker,</text>
+          <text x="410" y="86" text-anchor="middle" fill="#f1f5f9" font-size="10">Proyektor</text>
+          <text x="491" y="70" text-anchor="middle" fill="#34d399" font-size="16" font-weight="800">➔</text>
+          <!-- Step 4 -->
+          <rect x="504" y="24" width="138" height="82" rx="10" fill="#451a03" stroke="#fbbf24" stroke-width="2"/>
+          <text x="573" y="52" text-anchor="middle" fill="#fde68a" font-size="12" font-weight="800">4. STORAGE</text>
+          <text x="573" y="72" text-anchor="middle" fill="#f1f5f9" font-size="10">SSD, Harddisk,</text>
+          <text x="573" y="86" text-anchor="middle" fill="#f1f5f9" font-size="10">Flashdisk</text>
+        </svg>
+      `,
+      queueStack: `
+        <svg viewBox="0 0 640 175" class="w-full max-w-xl h-auto" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="632" height="167" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+          <!-- QUEUE -->
+          <text x="165" y="28" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="800">QUEUE (Antrean - FIFO)</text>
+          <rect x="30" y="52" width="80" height="58" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/>
+          <text x="70" y="78" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Data 1</text>
+          <text x="70" y="94" text-anchor="middle" fill="#bae6fd" font-size="9">Keluar Dulu</text>
+          <rect x="122" y="52" width="80" height="58" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+          <text x="162" y="84" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Data 2</text>
+          <rect x="214" y="52" width="80" height="58" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+          <text x="254" y="78" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Data 3</text>
+          <text x="254" y="94" text-anchor="middle" fill="#94a3b8" font-size="9">Masuk Akhir</text>
+          <text x="165" y="136" text-anchor="middle" fill="#7dd3fc" font-size="10">First In, First Out (Pertama Masuk = Pertama Keluar)</text>
+
+          <line x1="320" y1="20" x2="320" y2="155" stroke="#334155" stroke-width="1.5" stroke-dasharray="4"/>
+
+          <!-- STACK -->
+          <text x="480" y="28" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="800">STACK (Tumpukan - LIFO)</text>
+          <rect x="405" y="42" width="150" height="32" rx="6" fill="#b45309" stroke="#fbbf24" stroke-width="2"/>
+          <text x="480" y="62" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">Data 3 (Masuk & Keluar Dulu)</text>
+          <rect x="405" y="80" width="150" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+          <text x="480" y="99" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="700">Data 2</text>
+          <rect x="405" y="116" width="150" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+          <text x="480" y="135" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="700">Data 1 (Masuk Pertama)</text>
+        </svg>
+      `,
+      flowchart: `
+        <svg viewBox="0 0 620 205" class="w-full max-w-xl h-auto" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="612" height="197" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+          <!-- Start -->
+          <rect x="245" y="14" width="130" height="30" rx="15" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+          <text x="310" y="33" text-anchor="middle" fill="#a7f3d0" font-size="11" font-weight="800">MULAI (Start)</text>
+          <line x1="310" y1="44" x2="310" y2="62" stroke="#94a3b8" stroke-width="2"/>
+          <!-- Input -->
+          <polygon points="240,62 395,62 380,92 225,92" fill="#0c4a6e" stroke="#38bdf8" stroke-width="2"/>
+          <text x="310" y="81" text-anchor="middle" fill="#e0f2fe" font-size="11" font-weight="700">Tap Kartu Pelajar</text>
+          <line x1="310" y1="92" x2="310" y2="110" stroke="#94a3b8" stroke-width="2"/>
+          <!-- Decision Diamond -->
+          <polygon points="310,110 385,148 310,186 235,148" fill="#451a03" stroke="#f59e0b" stroke-width="2.2"/>
+          <text x="310" y="145" text-anchor="middle" fill="#fde68a" font-size="10" font-weight="800">Kartu</text>
+          <text x="310" y="158" text-anchor="middle" fill="#fde68a" font-size="10" font-weight="800">Aktif?</text>
+          <!-- Ya -->
+          <line x1="235" y1="148" x2="175" y2="148" stroke="#10b981" stroke-width="2.2"/>
+          <text x="206" y="141" text-anchor="middle" fill="#34d399" font-size="10" font-weight="800">YA</text>
+          <rect x="35" y="130" width="140" height="36" rx="8" fill="#065f46" stroke="#34d399" stroke-width="1.8"/>
+          <text x="105" y="152" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Gerbang Terbuka</text>
+          <!-- Tidak -->
+          <line x1="385" y1="148" x2="445" y2="148" stroke="#f43f5e" stroke-width="2.2"/>
+          <text x="415" y="141" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="800">TIDAK</text>
+          <rect x="445" y="130" width="140" height="36" rx="8" fill="#881337" stroke="#fb7185" stroke-width="1.8"/>
+          <text x="515" y="152" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Bunyikan Alarm</text>
+        </svg>
+      `
+    };
+
+    // =========================================================================
+    // 2. BANK SOAL LATIHAN KISI-KISI (DIMODIFIKASI LEBIH RAMAH & KONTEKSTUAL)
+    // =========================================================================
+    const QUESTION_BANK = [
+      // ---------------- ZONA 1: SEJARAH INFORMATIKA (10 SOAL) ----------------
+      {
+        id: 's1',
+        topic: 'sejarah',
+        tag: 'Alat Hitung Mekanik Awal',
+        story: 'Bayangkan kamu hidup di Prancis pada abad ke-17 sebelum ada kalkulator digital. Seorang remaja jenius bernama Blaise Pascal kasihan melihat ayahnya kelelahan menghitung pajak setiap malam, lalu ia membuat kotak roda gigi hitung otomatis.',
+        question: 'Apa nama mesin hitung mekanik bertenaga roda gigi pertama yang diciptakan oleh Blaise Pascal tersebut?',
+        options: [
+          'Pascaline yang bekerja memutar roda angka mekanik',
+          'Analytical Engine yang digerakkan oleh mesin uap',
+          'ENIAC yang memakai ribuan tabung kaca listrik',
+          'Sempoa Abacus yang memakai manik-manik kayu'
+        ],
+        answer: 0,
+        explanation: 'Tepat! Blaise Pascal menciptakan "Pascaline" pada tahun 1642 untuk membantu pekerjaan perhitungan pajak ayahnya.'
+      },
+      {
+        id: 's2',
+        topic: 'sejarah',
+        tag: 'Generasi Komputer',
+        svg: 'generasi',
+        question: 'Perhatikan lini masa evolusi komputer di atas! Mengapa komputer Generasi Pertama (1940-an) ukurannya bisa memenuhi satu ruangan kelas dan cepat sekali panas?',
+        options: [
+          'Karena memakai ribuan Tabung Vakum kaca yang boros listrik',
+          'Karena memakai chip Mikroprosesor berkecepatan sangat tinggi',
+          'Karena layarnya terbuat dari kaca tabung televisi yang tebal',
+          'Karena baterainya berukuran raksasa seperti aki truk besar'
+        ],
+        answer: 0,
+        explanation: 'Komputer Generasi Pertama mengandalkan Tabung Vakum (Vacuum Tube) yang bentuknya mirip bohlam lampu, berukuran besar, boros daya, dan mudah panas.'
+      },
+      {
+        id: 's3',
+        topic: 'sejarah',
+        tag: 'Tokoh Pionir Pemrograman',
+        story: 'Di zaman ketika komputer masih berupa rancangan mesin mekanik milik Charles Babbage, seorang ahli matematika perempuan menulis catatan berisi langkah-langkah instruksi agar mesin itu bisa berhitung otomatis.',
+        question: 'Siapakah tokoh perempuan luar biasa yang dijuluki sebagai "Programmer Komputer Pertama di Dunia"?',
+        options: [
+          'Ada Lovelace yang menulis catatan algoritma untuk mesin Babbage',
+          'Marie Curie yang menemukan unsur radioaktif untuk energi listrik',
+          'R.A. Kartini yang memperjuangkan pendidikan perempuan Indonesia',
+          'Amelia Earhart yang menerbangkan pesawat melintasi samudra'
+        ],
+        answer: 0,
+        explanation: 'Ada Lovelace diakui dunia sebagai pemrogram pertama karena menyusun algoritma pertama yang dirancang untuk dijalankan oleh mesin Analytical Engine.'
+      },
+      {
+        id: 's4',
+        topic: 'sejarah',
+        tag: 'Bapak Komputer Modern',
+        question: 'Charles Babbage mendapat gelar kehormatan sebagai "Bapak Komputer" karena gagasannya merancang mesin hitung otomatis yang memiliki unit input, pemroses, dan memori bernama ....',
+        options: [
+          'Analytical Engine (Mesin Analitis)',
+          'Smartphone (Telepon Pintar)',
+          'Punch Card (Kartu Berlubang)',
+          'Slide Rule (Mistar Hitung)'
+        ],
+        answer: 0,
+        explanation: 'Rancangan "Analytical Engine" buatan Charles Babbage memiliki konsep dasar cara kerja komputer modern sehingga ia dijuluki Bapak Komputer.'
+      },
+      {
+        id: 's5',
+        topic: 'sejarah',
+        tag: 'Media Penyimpanan Awal',
+        story: 'Pada tahun 1890, pemerintah Amerika Serikat kesulitan menghitung data sensus penduduk yang jumlahnya jutaan. Ilmuwan Herman Hollerith lalu menciptakan lembaran karton kaku yang dilubangi di titik tertentu untuk merekam data.',
+        question: 'Disebut apakah media penyimpan data berbentuk kartu karton berlubang buatan Herman Hollerith tersebut?',
+        options: [
+          'Punch Card (Kartu Perforasi)',
+          'Flashdisk USB (Memori Kilat)',
+          'Compact Disc (Piringan Optik)',
+          'Cloud Storage (Penyimpanan Awan)'
+        ],
+        answer: 0,
+        explanation: 'Punch Card atau kartu perforasi menggunakan pola lubang pada kartu kertas tebal untuk merepresentasikan data yang dibaca oleh mesin tabulasi.'
+      },
+      {
+        id: 's6',
+        topic: 'sejarah',
+        tag: 'Komputer Elektronik Pertama',
+        question: 'Pada tahun 1946, lahir komputer elektronik digital skala penuh pertama di dunia yang beratnya mencapai 30 ton dan dipakai untuk menghitung lintasan roket militer. Apa nama komputer raksasa tersebut?',
+        options: [
+          'ENIAC (Electronic Numerical Integrator and Computer)',
+          'MacBook Pro dengan layar sentuh beresolusi tinggi',
+          'PlayStation generasi pertama untuk permainan konsol',
+          'Kalkulator saku tenaga surya untuk pelajar sekolah'
+        ],
+        answer: 0,
+        explanation: 'ENIAC adalah komputer elektronik digital pertama yang dapat diprogram ulang, memiliki sekitar 18.000 tabung vakum dan berat 30 ton.'
+      },
+      {
+        id: 's7',
+        topic: 'sejarah',
+        tag: 'Arsitektur Komputer Modern',
+        question: 'Hampir semua laptop dan HP yang kita pakai hari ini mengikuti rancangan ilmuwan John von Neumann, yaitu menyimpan instruksi program dan data di dalam ....',
+        options: [
+          'Satu unit memori utama komputer yang sama',
+          'Lembaran kertas karton yang dilubangi manual',
+          'Kabel jaringan internet di luar ruangan kelas',
+          'Papan ketik eksternal yang terpisah dari layar'
+        ],
+        answer: 0,
+        explanation: 'Arsitektur von Neumann memperkenalkan konsep "Stored-Program", di mana program dan data disimpan bersama di dalam memori komputer.'
+      },
+      {
+        id: 's8',
+        topic: 'sejarah',
+        tag: 'Miniaturisasi Teknologi',
+        svg: 'generasi',
+        question: 'Dulu komputer sebesar satu ruangan, sekarang cukup digenggam di saku sebagai smartphone. Penemuan komponen apakah yang membuat ukuran komputer bisa menyusut sekecil itu?',
+        options: [
+          'Transistor mikro dan chip sirkuit terpadu (IC)',
+          'Tabung vakum kaca berukuran besar dan berat',
+          'Kabel telepon tembaga sepanjang ribuan kilometer',
+          'Roda gigi besi yang diputar menggunakan tuas tangan'
+        ],
+        answer: 0,
+        explanation: 'Penemuan transistor semikonduktor dan pemadatannya menjadi Integrated Circuit (IC) / mikroprosesor memungkinkan jutaan sirkuit muat di chip seukuran kuku.'
+      },
+      {
+        id: 's9',
+        topic: 'sejarah',
+        tag: 'Alat Hitung Tradisional',
+        question: 'Jauh sebelum listrik ditemukan, pedagang di Tiongkok dan Asia kuno sudah bisa berhitung penjumlahan dan perkalian dengan sangat cepat menggunakan bingkai kayu berisi manik-manik geser bernama ....',
+        options: [
+          'Sempoa (Abacus)',
+          'Mikroprosesor',
+          'Motherboard',
+          'Scanner'
+        ],
+        answer: 0,
+        explanation: 'Sempoa (Abacus) adalah salah satu alat bantu hitung tertua dalam sejarah manusia yang menjadi cikal bakal konsep komputasi.'
+      },
+      {
+        id: 's10',
+        topic: 'sejarah',
+        tag: 'Dampak Evolusi TIK',
+        question: 'Berkat perkembangan teknologi informatika saat ini, siswa kelas 7 di Bandung bisa berdiskusi kelompok dan berbagi dokumen tugas secara langsung dengan siswa di Papua. Manfaat utama yang terlihat adalah ....',
+        options: [
+          'Mempermudah akses ilmu dan kolaborasi jarak jauh',
+          'Membuat siswa tidak perlu lagi belajar membaca buku',
+          'Menghapus semua budaya daerah yang ada di Nusantara',
+          'Membatasi siswa agar hanya berteman di satu kelas saja'
+        ],
+        answer: 0,
+        explanation: 'Kemajuan TIK meruntuhkan batas jarak dan waktu sehingga distribusi pengetahuan serta kerja sama daring menjadi sangat mudah.'
+      },
+
+      // ---------------- ZONA 2: SISTEM KOMPUTER (10 SOAL) ----------------
+      {
+        id: 'k1',
+        topic: 'sistem',
+        tag: '3 Pilar Sistem Komputer',
+        story: 'Bima membeli satu set komputer lengkap dengan monitor, mouse, dan aplikasi gim. Namun saat dinyalakan, komputer itu hanya diam saja karena belum ada manusia yang mengoperasikannya.',
+        question: 'Dalam ekosistem sistem komputer, manusia yang mengoperasikan dan mengendalikan komputer disebut sebagai ....',
+        options: [
+          'Brainware (Pengguna)',
+          'Hardware (Perangkat Keras)',
+          'Software (Perangkat Lunak)',
+          'Malware (Program Perusak)'
+        ],
+        answer: 0,
+        explanation: 'Sistem komputer butuh 3 pilar: Hardware (perangkat fisik), Software (program), dan Brainware (manusia/pengguna yang mengoperasikan).'
+      },
+      {
+        id: 'k2',
+        topic: 'sistem',
+        tag: 'Arsitektur CPU (ALU & CU)',
+        svg: 'cpu',
+        question: 'Lihat diagram CPU di atas! Saat kamu memakai aplikasi kalkulator di komputer untuk menghitung 250 x 48, bagian CPU manakah yang bertugas mengerjakan hitungan matematika tersebut?',
+        options: [
+          'ALU (Arithmetic Logic Unit)',
+          'Control Unit (CU)',
+          'Power Supply Unit (PSU)',
+          'Monitor Layar Sentuh'
+        ],
+        answer: 0,
+        explanation: 'ALU (Arithmetic Logic Unit) adalah bagian di dalam CPU yang khusus menangani semua operasi hitung matematika dan perbandingan logika.'
+      },
+      {
+        id: 'k3',
+        topic: 'sistem',
+        tag: 'Siklus IPOS (Input-Process-Output-Storage)',
+        svg: 'ipos',
+        question: 'Perhatikan siklus IPOS di atas! Ketika kamu menyanyikan lagu ke mikrofon laptop untuk direkam menjadi file MP3, mikrofon tersebut berperan sebagai perangkat ....',
+        options: [
+          'Input Device (Perangkat Masukan)',
+          'Output Device (Perangkat Keluaran)',
+          'Storage Device (Media Penyimpan)',
+          'Processing Device (Unit Pemroses)'
+        ],
+        answer: 0,
+        explanation: 'Mikrofon menangkap suara dari luar untuk dimasukkan sebagai sinyal data digital ke dalam komputer, sehingga termasuk Input Device.'
+      },
+      {
+        id: 'k4',
+        topic: 'sistem',
+        tag: 'Sistem Operasi vs Aplikasi',
+        question: 'Sebelum bisa memasang aplikasi WhatsApp, Chrome, atau Microsoft Word, sebuah laptop atau HP wajib memiliki perangkat lunak utama pengelola seluruh perangkat keras yang disebut ....',
+        options: [
+          'Sistem Operasi (seperti Windows, Linux, Android, macOS)',
+          'Perangkat Lunak Pengolah Kata (seperti Google Docs)',
+          'Perangkat Lunak Pengolah Angka (seperti MS Excel)',
+          'Perangkat Lunak Pemutar Video (seperti VLC Player)'
+        ],
+        answer: 0,
+        explanation: 'Sistem Operasi (OS) adalah nyawa perangkat lunak yang mengelola CPU, memori, dan menjadi jembatan bagi aplikasi lain.'
+      },
+      {
+        id: 'k5',
+        topic: 'sistem',
+        tag: 'Sifat Memori RAM (Volatile)',
+        story: 'Rani sedang mengetik cerita pendek di komputer sekolah selama 30 menit tanpa menekan tombol Save. Tiba-tiba listrik sekolah padam! Saat listrik menyala lagi, ketikan Rani hilang semua.',
+        question: 'Mengapa dokumen yang belum di-Save tersebut bisa hilang saat listrik padam?',
+        options: [
+          'Karena data baru tersimpan sementara di RAM (bersifat volatile)',
+          'Karena harddisk otomatis menghapus tugas yang belum selesai',
+          'Karena keyboard komputer tidak terhubung dengan aliran listrik',
+          'Karena monitor komputer rusak terkena pemadaman listrik'
+        ],
+        answer: 0,
+        explanation: 'RAM (Random Access Memory) bersifat volatile (sementara), artinya seluruh isinya langsung terhapus begitu aliran listrik terputus.'
+      },
+      {
+        id: 'k6',
+        topic: 'sistem',
+        tag: 'Memori Permanen ROM & Booting',
+        question: 'Saat kamu menekan tombol Power pada komputer, muncul logo merek laptop dan proses pemeriksaan komponen awal (booting). Program dasar BIOS/UEFI untuk booting ini disimpan secara permanen di dalam ....',
+        options: [
+          'ROM (Read Only Memory)',
+          'RAM (Random Access Memory)',
+          'Aplikasi Browser Chrome',
+          'Recycle Bin (Tempat Sampah)'
+        ],
+        answer: 0,
+        explanation: 'ROM (Read Only Memory) bersifat non-volatile (permanen) dan berisi instruksi dasar BIOS/UEFI yang dibutuhkan komputer saat pertama dinyalakan.'
+      },
+      {
+        id: 'k7',
+        topic: 'sistem',
+        tag: 'Antarmuka Pengguna (GUI)',
+        question: 'Komputer modern sangat mudah dipakai oleh pelajar karena kita cukup mengklik ikon gambar, folder, dan jendela menggunakan mouse. Antarmuka visual ramah pengguna ini disebut ....',
+        options: [
+          'GUI (Graphical User Interface)',
+          'CLI (Command Line Interface)',
+          'CPU (Central Processing Unit)',
+          'USB (Universal Serial Bus)'
+        ],
+        answer: 0,
+        explanation: 'GUI (Graphical User Interface) memudahkan interaksi manusia dengan komputer lewat tampilan grafis seperti ikon dan menu.'
+      },
+      {
+        id: 'k8',
+        topic: 'sistem',
+        tag: 'Ekstensi Berkas Digital',
+        question: 'Di folder tugas sekolah terdapat file bernama "Laporan_Keuangan_Kelas.xlsx". Dilihat dari akhiran ekstensinya (.xlsx), file tersebut dibuat menggunakan aplikasi ....',
+        options: [
+          'Pengolah angka / tabel (seperti Microsoft Excel)',
+          'Pengolah kata / surat (seperti Microsoft Word)',
+          'Pemutar musik audio (seperti Winamp / Spotify)',
+          'Pengedit video film (seperti CapCut / Premiere)'
+        ],
+        answer: 0,
+        explanation: 'Ekstensi .xlsx adalah format standar lembar kerja (spreadsheet) pengolah angka dan tabel seperti Microsoft Excel.'
+      },
+      {
+        id: 'k9',
+        topic: 'sistem',
+        tag: 'Perangkat Keluaran (Output)',
+        question: 'Ibu guru ingin menampilkan slide presentasi materi TIK ke layar lebar di dinding kelas agar semua siswa bisa membaca dengan jelas. Perangkat output yang Ibu guru hubungkan ke laptop adalah ....',
+        options: [
+          'Proyektor LCD',
+          'Pemindai (Scanner)',
+          'Papan Ketik (Keyboard)',
+          'Tetikus (Mouse)'
+        ],
+        answer: 0,
+        explanation: 'Proyektor LCD menerima sinyal gambar dari laptop dan menampilkannya ke layar besar, sehingga merupakan Output Device.'
+      },
+      {
+        id: 'k10',
+        topic: 'sistem',
+        tag: 'Keamanan Digital & Antivirus',
+        question: 'Temanmu menemukan file "Game_Gratis_Bajakan.exe" dari situs web mencurigakan di internet. Tindakan paling aman yang harus kamu sarankan kepadanya adalah ....',
+        options: [
+          'Membatalkan unduhan dan mengandalkan aplikasi resmi serta antivirus',
+          'Langsung menginstalnya lalu mematikan antivirus agar tidak terblokir',
+          'Mengirimkan file tersebut ke semua grup WhatsApp kelas 7',
+          'Memasukkan kata sandi email pribadi ke dalam situs web tersebut'
+        ],
+        answer: 0,
+        explanation: 'File bajakan dari sumber tidak resmi sering disisipi virus/malware. Selalu gunakan sumber resmi dan aktifkan antivirus.'
+      },
+
+      // ---------------- ZONA 3: BERPIKIR KOMPUTASIONAL (10 SOAL) ----------------
+      {
+        id: 'b1',
+        topic: 'berpikir',
+        tag: 'Pilar 1: Dekomposisi',
+        story: 'OSIS SMP Merdeka ditugaskan mengadakan acara Pentas Seni Sekolah. Karena kegiatannya sangat besar, ketua OSIS membagi tugas menjadi tim panggung, tim konsumsi, tim pendaftaran peserta, dan tim publikasi.',
+        question: 'Cara ketua OSIS memecah acara besar menjadi bagian-bagian tugas kecil yang mudah dikerjakan menerapkan pilar berpikir komputasional yaitu ....',
+        options: [
+          'Dekomposisi (Decomposition)',
+          'Abstraksi (Abstraction)',
+          'Pengenalan Pola (Pattern Recognition)',
+          'Enkripsi Sandi (Encryption)'
+        ],
+        answer: 0,
+        explanation: 'Dekomposisi adalah keterampilan memecah masalah besar dan kompleks menjadi bagian-bagian kecil yang lebih sederhana dan mudah dikelola.'
+      },
+      {
+        id: 'b2',
+        topic: 'berpikir',
+        tag: 'Pilar 2: Pengenalan Pola',
+        question: 'Pemilik kantin sekolah mencatat bahwa setiap hari Jumat saat jam istirahat pertama, es teh manis dan nasi goreng selalu habis terjual 2 kali lipat lebih banyak dibanding hari biasa. Kemampuan membaca kebiasaan berulang ini disebut ....',
+        options: [
+          'Pengenalan Pola (Pattern Recognition)',
+          'Dekomposisi Masalah (Decomposition)',
+          'Abstraksi Informasi (Abstraction)',
+          'Instalasi Perangkat (Installation)'
+        ],
+        answer: 0,
+        explanation: 'Pengenalan Pola adalah kemampuan mengamati kesamaan, tren, atau keteraturan yang berulang untuk memprediksi dan mengambil keputusan cerdas.'
+      },
+      {
+        id: 'b3',
+        topic: 'berpikir',
+        tag: 'Pilar 3: Abstraksi',
+        question: 'Saat menggambar denah lokasi rumah menuju sekolah untuk teman baru, kamu hanya menggambar jalan utama, belokan penting, dan nama gang tanpa menggambar warna cat pagar rumah tetangga. Proses menyaring info penting ini disebut ....',
+        options: [
+          'Abstraksi (Abstraction)',
+          'Algoritma (Algorithm)',
+          'Dekomposisi (Decomposition)',
+          'Kompilasi (Compilation)'
+        ],
+        answer: 0,
+        explanation: 'Abstraksi berarti fokus pada informasi yang benar-benar penting dan mengabaikan detail kecil yang tidak relevan agar masalah lebih sederhana.'
+      },
+      {
+        id: 'b4',
+        topic: 'berpikir',
+        tag: 'Pilar 4: Algoritma',
+        question: 'Resep cara memasak mi instan yang dituliskan secara berurutan mulai dari merebus air, memasukkan mi, menuang bumbu, hingga siap disajikan adalah contoh nyata dari ....',
+        options: [
+          'Algoritma (urutan langkah logis yang sistematis)',
+          'Abstraksi (menghapus bahan-bahan yang tidak disukai)',
+          'Hardware (peralatan dapur seperti panci dan kompor)',
+          'Brainware (orang yang sedang memakan mi instan)'
+        ],
+        answer: 0,
+        explanation: 'Algoritma adalah serangkaian langkah-langkah logis yang tersusun secara sistematis dan berurutan untuk menyelesaikan suatu tujuan.'
+      },
+      {
+        id: 'b5',
+        topic: 'berpikir',
+        tag: 'Struktur Data: Queue (Antrean)',
+        svg: 'queueStack',
+        question: 'Perhatikan gambar perbandingan struktur data di atas! Di kasir kantin sekolah, siswa yang datang mengantre paling awal akan dilayani dan selesai paling dulu (First In, First Out). Konsep ini disebut ....',
+        options: [
+          'Queue (Antrean)',
+          'Stack (Tumpukan)',
+          'Tree (Pohon Cabang)',
+          'Virus (Perusak Data)'
+        ],
+        answer: 0,
+        explanation: 'Queue (Antrean) menerapkan prinsip FIFO (First In, First Out): elemen yang pertama kali masuk akan menjadi yang pertama kali keluar.'
+      },
+      {
+        id: 'b6',
+        topic: 'berpikir',
+        tag: 'Struktur Data: Stack (Tumpukan)',
+        svg: 'queueStack',
+        question: 'Lihat kembali gambar di atas! Saat kamu menumpuk 5 buku pelajaran di atas meja satu per satu, buku yang diletakkan paling akhir di atas pasti akan diambil paling pertama (Last In, First Out). Konsep ini disebut ....',
+        options: [
+          'Stack (Tumpukan)',
+          'Queue (Antrean)',
+          'Looping (Perulangan)',
+          'Browser (Peramban)'
+        ],
+        answer: 0,
+        explanation: 'Stack (Tumpukan) menerapkan prinsip LIFO (Last In, First Out): elemen yang terakhir masuk ke puncak tumpukan akan keluar pertama kali.'
+      },
+      {
+        id: 'b7',
+        topic: 'berpikir',
+        tag: 'Simbol Flowchart: Decision',
+        svg: 'flowchart',
+        question: 'Perhatikan diagram alir (flowchart) gerbang sekolah di atas! Simbol berbentuk belah ketupat bertuliskan "Kartu Aktif?" digunakan untuk menyatakan ....',
+        options: [
+          'Keputusan (Decision) percabangan kondisi Ya atau Tidak',
+          'Titik mulai (Start) atau titik selesai (End) sebuah program',
+          'Proses perhitungan perkalian dan pembagian angka otomatis',
+          'Tampilan hasil cetakan kertas dari mesin printer sekolah'
+        ],
+        answer: 0,
+        explanation: 'Simbol belah ketupat (rhombus) dalam flowchart melambangkan Decision (Keputusan) yang menguji suatu syarat dengan hasil Ya/Benar atau Tidak/Salah.'
+      },
+      {
+        id: 'b8',
+        topic: 'berpikir',
+        tag: 'Membaca Alur Flowchart',
+        svg: 'flowchart',
+        question: 'Berdasarkan diagram alir gerbang sekolah pada gambar di atas, apa yang akan terjadi jika ada orang asing menempelkan kartu yang TIDAK AKTIF ke mesin pemindai?',
+        options: [
+          'Sistem mengambil jalur TIDAK dan langsung membunyikan alarm',
+          'Sistem mengambil jalur YA dan langsung membuka gerbang lebar',
+          'Sistem berhenti total dan menghapus semua data kartu siswa',
+          'Sistem mengulang pemindaian sebanyak seratus kali tanpa henti'
+        ],
+        answer: 0,
+        explanation: 'Mengikuti panah bercabang dari belah ketupat "Kartu Aktif?", jika kondisinya TIDAK terpenuhi, alur menuju kotak merah "Bunyikan Alarm".'
+      },
+      {
+        id: 'b9',
+        topic: 'berpikir',
+        tag: 'Simbol Flowchart: Terminal & Process',
+        question: 'Dalam standar pembuatan diagram alir (flowchart), bentuk simbol yang digunakan untuk menandai titik MULAI (Start) dan SELESAI (End) adalah ....',
+        options: [
+          'Lonjong / Kapsul (Terminal)',
+          'Belah Ketupat (Decision)',
+          'Jajargenjang (Input/Output)',
+          'Segitiga Sama Sisi'
+        ],
+        answer: 0,
+        explanation: 'Simbol Terminal berbentuk persegi panjang bersudut melengkung (kapsul/lonjong) dipakai untuk mengawali dan mengakhiri flowchart.'
+      },
+      {
+        id: 'b10',
+        topic: 'berpikir',
+        tag: 'Struktur Kendali Algoritma',
+        question: 'Dalam logika algoritma pemrograman, perintah "Ulangi menyiram tanaman sebanyak 5 kali" termasuk ke dalam struktur kendali ....',
+        options: [
+          'Perulangan (Looping / Iteration)',
+          'Percabangan (Selection / If-Else)',
+          'Runtunan Tunggal (Sequence)',
+          'Penghapusan Data (Delete)'
+        ],
+        answer: 0,
+        explanation: 'Perulangan (Looping) digunakan untuk menjalankan instruksi yang sama secara berulang-ulang hingga jumlah atau syarat tertentu tercapai.'
+      }
+    ];
+
+    // =========================================================================
+    // 3. DATA PASANGAN UNTUK MINI-GAME DUEL COCOKKAN KONSEP
+    // =========================================================================
+    const MATCH_PAIRS_POOL = [
+      { id: 1, term: 'Pascaline', desc: 'Kalkulator roda gigi mekanik karya Blaise Pascal' },
+      { id: 2, term: 'Tabung Vakum', desc: 'Komponen utama komputer Generasi 1 yang cepat panas' },
+      { id: 3, term: 'Ada Lovelace', desc: 'Tokoh perempuan pemrogram komputer pertama di dunia' },
+      { id: 4, term: 'ALU (CPU)', desc: 'Bagian prosesor untuk hitung matematika & logika' },
+      { id: 5, term: 'RAM', desc: 'Memori kerja sementara yang datanya hilang saat mati lampu' },
+      { id: 6, term: 'ROM', desc: 'Memori permanen penyimpan instruksi booting BIOS' },
+      { id: 7, term: 'Dekomposisi', desc: 'Memecah masalah besar menjadi bagian-bagian kecil' },
+      { id: 8, term: 'Abstraksi', desc: 'Menyaring info penting & mengabaikan detail minor' },
+      { id: 9, term: 'Queue (Antrean)', desc: 'Struktur data First In First Out (masuk awal keluar awal)' },
+      { id: 10, term: 'Stack (Tumpukan)', desc: 'Struktur data Last In First Out (masuk akhir keluar awal)' },
+      { id: 11, term: 'Belah Ketupat', desc: 'Simbol flowchart untuk keputusan kondisi Ya / Tidak' },
+      { id: 12, term: 'Scanner', desc: 'Perangkat masukan (input) pemindai dokumen cetak' }
+    ];
+
+    // =========================================================================
+    // 4. STATE APLIKASI & AUDIO SINTETIS (WEB AUDIO API)
+    // =========================================================================
+    const gameState = {
+      playerName: 'Cyber Agent',
+      playerClass: '7A',
+      avatar: '🤖',
+      timerEnabled: true,
+      soundEnabled: true,
+      totalPoints: 0,
+      completedZones: new Set(),
+      // State Kuis Aktif
+      currentZone: 'sejarah',
+      questions: [],
+      currentIndex: 0,
+      score: 0,
+      lives: 3,
+      streak: 0,
+      maxStreak: 0,
+      correctCount: 0,
+      wrongQuestions: [],
+      timerInterval: null,
+      timeLeft: 35,
+      answered: false,
+      // Statistik Per Topik
+      topicStats: {
+        sejarah: { correct: 0, total: 0 },
+        sistem: { correct: 0, total: 0 },
+        berpikir: { correct: 0, total: 0 }
+      },
+      // State Mini-Game Match
+      matchTimer: null,
+      matchTimeLeft: 60,
+      matchScore: 0,
+      selectedLeft: null,
+      selectedRight: null,
+      matchedCount: 0
+    };
+
+    // Efek Suara Sintetis Tanpa File Eksternal
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (!gameState.soundEnabled) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.09); // E5
+        osc.frequency.setValueAtTime(783.99, now + 0.18); // G5
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+        osc.start(now);
+        osc.stop(now + 0.38);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(135, now + 0.28);
+        gain.gain.setValueAtTime(0.16, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+        osc.start(now);
+        osc.stop(now + 0.32);
+      } else if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(620, now);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.start(now);
+        osc.stop(now + 0.07);
+      } else if (type === 'win') {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((freq, i) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.type = 'triangle';
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.frequency.setValueAtTime(freq, now + i * 0.11);
+          g.gain.setValueAtTime(0.16, now + i * 0.11);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.11 + 0.35);
+          o.start(now + i * 0.11);
+          o.stop(now + i * 0.11 + 0.35);
+        });
+      }
+    }
+
+    function toggleSound() {
+      gameState.soundEnabled = !gameState.soundEnabled;
+      document.getElementById('sound-icon').textContent = gameState.soundEnabled ? '🔊' : '🔇';
+      showToast(gameState.soundEnabled ? 'Efek suara diaktifkan' : 'Efek suara dimatikan');
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      const content = document.getElementById('toast-content');
+      content.textContent = msg;
+      box.classList.remove('hidden');
+      clearTimeout(box._timeout);
+      box._timeout = setTimeout(() => box.classList.add('hidden'), 2400);
+    }
+
+    // =========================================================================
+    // 5. NAVIGASI LAYAR & PENDAFTARAN PEMAIN
+    // =========================================================================
+    document.querySelectorAll('.avatar-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        playSound('click');
+        document.querySelectorAll('.avatar-btn').forEach(b => {
+          b.classList.remove('bg-cyan-500/20', 'border-cyan-400', 'active');
+          b.classList.add('bg-slate-800/80', 'border-transparent');
+        });
+        btn.classList.remove('bg-slate-800/80', 'border-transparent');
+        btn.classList.add('bg-cyan-500/20', 'border-cyan-400', 'active');
+        gameState.avatar = btn.dataset.avatar;
+      });
+    });
+
+    function switchScreen(screenId) {
+      ['screen-start', 'screen-lobby', 'screen-quiz', 'screen-match', 'screen-result'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(screenId).classList.remove('hidden');
+
+      const btnHome = document.getElementById('btn-home');
+      if (screenId === 'screen-start') {
+        btnHome.classList.add('hidden');
+      } else {
+        btnHome.classList.remove('hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function enterLobby() {
+      playSound('click');
+      const nameInput = document.getElementById('input-name').value.trim();
+      gameState.playerName = nameInput || 'Cyber Agent';
+      gameState.playerClass = document.getElementById('input-class').value;
+      gameState.timerEnabled = document.getElementById('toggle-timer').checked;
+
+      // Update UI Header & Lobi
+      document.getElementById('header-player-badge').classList.remove('hidden');
+      document.getElementById('header-avatar').textContent = gameState.avatar;
+      document.getElementById('header-name').textContent = gameState.playerName;
+      document.getElementById('header-class').textContent = gameState.playerClass;
+
+      document.getElementById('lobby-avatar').textContent = gameState.avatar;
+      document.getElementById('lobby-player-name').textContent = gameState.playerName;
+      document.getElementById('lobby-player-class').textContent = `Kelas ${gameState.playerClass}`;
+
+      switchScreen('screen-lobby');
+    }
+
+    function confirmReturnHome() {
+      clearInterval(gameState.timerInterval);
+      clearInterval(gameState.matchTimer);
+      playSound('click');
+      if (!document.getElementById('screen-start').classList.contains('hidden')) return;
+      returnToLobby();
+    }
+
+    function returnToLobby() {
+      clearInterval(gameState.timerInterval);
+      clearInterval(gameState.matchTimer);
+      document.getElementById('lobby-total-points').textContent = gameState.totalPoints;
+      document.getElementById('lobby-completed-count').textContent = `${gameState.completedZones.size} / 4`;
+      switchScreen('screen-lobby');
+    }
+
+    // =========================================================================
+    // 6. ENGINE UTAMA KUIS INTERAKTIF
+    // =========================================================================
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz(zone, customQuestions = null) {
+      playSound('click');
+      gameState.currentZone = zone;
+      gameState.currentIndex = 0;
+      gameState.score = 0;
+      gameState.lives = 3;
+      gameState.streak = 0;
+      gameState.maxStreak = 0;
+      gameState.correctCount = 0;
+      gameState.wrongQuestions = [];
+
+      const zoneLabels = {
+        sejarah: 'Zona 1: Mesin Waktu Informatika',
+        sistem: 'Zona 2: Ekosistem Sistem Komputer',
+        berpikir: 'Zona 3: Arena Logika Komputasional',
+        boss: 'Simulasi UAS Gabungan (15 Soal)',
+        retry: 'Mode Perbaikan Soal Salah'
+      };
+      document.getElementById('quiz-zone-label').textContent = zoneLabels[zone] || 'Arena Latihan';
+
+      if (customQuestions) {
+        gameState.questions = customQuestions;
+      } else if (zone === 'boss') {
+        gameState.questions = shuffleArray(QUESTION_BANK).slice(0, 15);
+      } else {
+        const filtered = QUESTION_BANK.filter(q => q.topic === zone);
+        gameState.questions = shuffleArray(filtered);
+      }
+
+      updateQuizHUD();
+      switchScreen('screen-quiz');
+      renderQuestion();
+    }
+
+    function updateQuizHUD() {
+      // Nyawa
+      const hearts = [];
+      for (let i = 0; i < 3; i++) {
+        hearts.push(i < gameState.lives ? '❤️' : '🖤');
+      }
+      document.getElementById('lives-display').innerHTML = hearts.join('');
+      document.getElementById('quiz-score').textContent = gameState.score;
+
+      const streakBadge = document.getElementById('streak-badge');
+      if (gameState.streak >= 2) {
+        streakBadge.classList.remove('hidden');
+        document.getElementById('streak-count').textContent = gameState.streak;
+      } else {
+        streakBadge.classList.add('hidden');
+      }
+    }
+
+    function renderQuestion() {
+      clearInterval(gameState.timerInterval);
+      gameState.answered = false;
+
+      const q = gameState.questions[gameState.currentIndex];
+      const total = gameState.questions.length;
+
+      // Progress Bar & Nomor
+      const pct = ((gameState.currentIndex) / total) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${Math.max(8, pct)}%`;
+      document.getElementById('question-number-badge').textContent = `Soal ${gameState.currentIndex + 1} dari ${total}`;
+      document.getElementById('question-concept-tag').textContent = `Kisi-Kisi: ${q.tag}`;
+
+      // Diagram SVG jika ada
+      const svgBox = document.getElementById('question-svg-container');
+      if (q.svg && SVG_DIAGRAMS[q.svg]) {
+        svgBox.innerHTML = SVG_DIAGRAMS[q.svg];
+        svgBox.classList.remove('hidden');
+      } else {
+        svgBox.innerHTML = '';
+        svgBox.classList.add('hidden');
+      }
+
+      // Cerita Konteks jika ada
+      const storyBox = document.getElementById('question-story-box');
+      if (q.story) {
+        storyBox.innerHTML = `<strong class="text-cyan-300">📖 Ilustrasi Kasus:</strong> ${q.story}`;
+        storyBox.classList.remove('hidden');
+      } else {
+        storyBox.classList.add('hidden');
+      }
+
+      // Pertanyaan
+      document.getElementById('question-text').textContent = q.question;
+
+      // Acak posisi opsi jawaban sambil menjaga pelacakan jawaban benar
+      const mappedOptions = q.options.map((text, idx) => ({
+        text,
+        isCorrect: idx === q.answer
+      }));
+      const shuffledOptions = shuffleArray(mappedOptions);
+      const letters = ['A', 'B', 'C', 'D'];
+
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      shuffledOptions.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.correct = opt.isCorrect ? '1' : '0';
+        btn.className = 'option-card w-full text-left p-4 rounded-2xl bg-slate-900/90 border border-slate-700/80 flex items-center gap-3.5 group';
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-xl bg-slate-800 group-hover:bg-cyan-500/20 border border-slate-700 group-hover:border-cyan-400 text-xs font-extrabold text-cyan-300 flex items-center justify-center shrink-0 transition">
+            ${letters[i]}
+          </span>
+          <span class="text-xs sm:text-sm font-medium text-slate-100 leading-snug">${opt.text}</span>
+        `;
+        btn.onclick = () => handleAnswer(btn, opt.isCorrect, q);
+        optionsContainer.appendChild(btn);
+      });
+
+      // Sembunyikan panel feedback
+      document.getElementById('feedback-panel').classList.add('hidden');
+
+      // Timer
+      const timerBox = document.getElementById('timer-box');
+      if (gameState.timerEnabled) {
+        timerBox.classList.remove('hidden');
+        gameState.timeLeft = 35;
+        document.getElementById('timer-text').textContent = gameState.timeLeft;
+        timerBox.classList.remove('border-rose-500', 'text-rose-400');
+
+        gameState.timerInterval = setInterval(() => {
+          gameState.timeLeft--;
+          document.getElementById('timer-text').textContent = gameState.timeLeft;
+          if (gameState.timeLeft <= 10) {
+            timerBox.classList.add('border-rose-500', 'text-rose-400');
+          }
+          if (gameState.timeLeft <= 0) {
+            clearInterval(gameState.timerInterval);
+            handleTimeOut(q);
+          }
+        }, 1000);
+      } else {
+        timerBox.classList.add('hidden');
+      }
+    }
+
+    function handleTimeOut(q) {
+      if (gameState.answered) return;
+      gameState.answered = true;
+      playSound('wrong');
+
+      gameState.lives = Math.max(0, gameState.lives - 1);
+      gameState.streak = 0;
+      gameState.wrongQuestions.push(q);
+      gameState.topicStats[q.topic].total++;
+
+      highlightCorrectOption();
+      showFeedback(false, '⏰ Waktu Habis!', '+0 Poin', q.explanation);
+      updateQuizHUD();
+    }
+
+    function handleAnswer(selectedBtn, isCorrect, q) {
+      if (gameState.answered) return;
+      gameState.answered = true;
+      clearInterval(gameState.timerInterval);
+
+      // Catat statistik topik
+      gameState.topicStats[q.topic].total++;
+
+      if (isCorrect) {
+        playSound('correct');
+        gameState.streak++;
+        if (gameState.streak > gameState.maxStreak) gameState.maxStreak = gameState.streak;
+        gameState.correctCount++;
+        gameState.topicStats[q.topic].correct++;
+
+        const bonus = (gameState.streak - 1) * 20;
+        const earned = 100 + bonus;
+        gameState.score += earned;
+        gameState.totalPoints += earned;
+
+        selectedBtn.classList.remove('bg-slate-900/90', 'border-slate-700/80');
+        selectedBtn.classList.add('bg-emerald-500/20', 'border-emerald-400', 'ring-2', 'ring-emerald-400/40');
+
+        disableAllOptions();
+        showFeedback(
+          true,
+          gameState.streak >= 2 ? `🎉 Mantap! Jawaban Benar (${gameState.streak}x Combo)` : '✅ Jawaban Tepat!',
+          `+${earned} Poin`,
+          q.explanation
+        );
+      } else {
+        playSound('wrong');
+        gameState.lives = Math.max(0, gameState.lives - 1);
+        gameState.streak = 0;
+        gameState.wrongQuestions.push(q);
+
+        const card = document.getElementById('question-card');
+        card.classList.add('animate-shake');
+        setTimeout(() => card.classList.remove('animate-shake'), 450);
+
+        selectedBtn.classList.remove('bg-slate-900/90', 'border-slate-700/80');
+        selectedBtn.classList.add('bg-rose-500/20', 'border-rose-500');
+
+        highlightCorrectOption();
+        showFeedback(
+          false,
+          '❌ Kurang Tepat, Yuk Pelajari!',
+          gameState.lives === 0 ? 'Nyawa Habis!' : '-1 Nyawa ❤️',
+          q.explanation
+        );
+      }
+
+      updateQuizHUD();
+    }
+
+    function highlightCorrectOption() {
+      document.querySelectorAll('#options-container button').forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.correct === '1') {
+          btn.classList.remove('bg-slate-900/90', 'border-slate-700/80');
+          btn.classList.add('bg-emerald-500/20', 'border-emerald-400');
+        }
+      });
+    }
+
+    function disableAllOptions() {
+      document.querySelectorAll('#options-container button').forEach(btn => {
+        btn.disabled = true;
+      });
+    }
+
+    function showFeedback(isSuccess, title, pointsLabel, explanation) {
+      const panel = document.getElementById('feedback-panel');
+      const statusEl = document.getElementById('feedback-status');
+      const pointsEl = document.getElementById('feedback-points');
+      const expEl = document.getElementById('feedback-explanation');
+      const nextBtn = document.getElementById('btn-next-question');
+
+      panel.classList.remove('hidden', 'bg-emerald-950/60', 'border-emerald-500/40', 'bg-rose-950/60', 'border-rose-500/40');
+      if (isSuccess) {
+        panel.classList.add('bg-emerald-950/60', 'border-emerald-500/40');
+        statusEl.className = 'font-extrabold text-base text-emerald-300 flex items-center gap-2';
+        pointsEl.className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300';
+      } else {
+        panel.classList.add('bg-rose-950/60', 'border-rose-500/40');
+        statusEl.className = 'font-extrabold text-base text-rose-300 flex items-center gap-2';
+        pointsEl.className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300';
+      }
+
+      statusEl.textContent = title;
+      pointsEl.textContent = pointsLabel;
+      expEl.innerHTML = `<strong class="text-cyan-300">💡 Bedah Konsep:</strong> ${explanation}`;
+
+      const isLast = gameState.currentIndex >= gameState.questions.length - 1 || gameState.lives <= 0;
+      nextBtn.innerHTML = isLast
+        ? '<span>Lihat Hasil & Sertifikat</span> <span>🏆</span>'
+        : '<span>Lanjut Soal Berikutnya</span> <span>➔</span>';
+    }
+
+    function nextQuestion() {
+      playSound('click');
+      if (gameState.lives <= 0 || gameState.currentIndex >= gameState.questions.length - 1) {
+        finishQuiz();
+      } else {
+        gameState.currentIndex++;
+        renderQuestion();
+      }
+    }
+
+    function finishQuiz() {
+      clearInterval(gameState.timerInterval);
+      document.getElementById('quiz-progress-bar').style.width = '100%';
+
+      const totalAnswered = gameState.currentIndex + 1;
+      const accuracy = Math.round((gameState.correctCount / gameState.questions.length) * 100);
+
+      // Tandai zona selesai jika akurasi >= 60%
+      if (accuracy >= 60 && ['sejarah', 'sistem', 'berpikir', 'boss'].includes(gameState.currentZone)) {
+        gameState.completedZones.add(gameState.currentZone);
+        const badgeMap = {
+          sejarah: 'badge-zone-1',
+          sistem: 'badge-zone-2',
+          berpikir: 'badge-zone-3',
+          boss: 'badge-zone-boss'
+        };
+        const badgeEl = document.getElementById(badgeMap[gameState.currentZone]);
+        if (badgeEl) {
+          badgeEl.textContent = `✅ Lulus (${accuracy}%)`;
+          badgeEl.className = 'text-xs font-bold text-emerald-400';
+        }
+      }
+
+      // Predikat Rank
+      let rankTitle = 'Cyber Cadet';
+      let trophy = '🎖️';
+      if (accuracy >= 90) {
+        rankTitle = 'Grandmaster Informatika';
+        trophy = '👑';
+        playSound('win');
+        launchConfetti();
+      } else if (accuracy >= 70) {
+        rankTitle = 'Tech Explorer Andal';
+        trophy = '🏆';
+        playSound('win');
+        launchConfetti();
+      } else {
+        rankTitle = 'Digital Apprentice';
+        trophy = '🛡️';
+      }
+
+      document.getElementById('result-trophy').textContent = trophy;
+      document.getElementById('result-rank-title').textContent = rankTitle;
+      document.getElementById('cert-player-name').textContent = gameState.playerName;
+      document.getElementById('cert-player-class').textContent = `Kelas ${gameState.playerClass}`;
+      document.getElementById('res-score').textContent = gameState.score;
+      document.getElementById('res-accuracy').textContent = `${accuracy}%`;
+      document.getElementById('res-correct').textContent = `${gameState.correctCount}/${gameState.questions.length}`;
+      document.getElementById('res-streak').textContent = `${gameState.maxStreak}x`;
+
+      // Update Progress Bar Per Topik
+      ['sejarah', 'sistem', 'berpikir'].forEach(topic => {
+        const st = gameState.topicStats[topic];
+        const textEl = document.getElementById(`stat-${topic}-text`);
+        const barEl = document.getElementById(`stat-${topic}-bar`);
+        if (st.total === 0) {
+          textEl.textContent = 'Belum diuji';
+          barEl.style.width = '0%';
+        } else {
+          const p = Math.round((st.correct / st.total) * 100);
+          textEl.textContent = `${st.correct}/${st.total} Benar (${p}%)`;
+          barEl.style.width = `${p}%`;
+        }
+      });
+
+      // Tombol ulangi soal yang salah
+      const retryBtn = document.getElementById('btn-retry-wrong');
+      if (gameState.wrongQuestions.length > 0) {
+        retryBtn.classList.remove('hidden');
+        document.getElementById('wrong-count').textContent = gameState.wrongQuestions.length;
+      } else {
+        retryBtn.classList.add('hidden');
+      }
+
+      switchScreen('screen-result');
+    }
+
+    function retryWrongQuestions() {
+      if (gameState.wrongQuestions.length === 0) return;
+      const toRetry = [...gameState.wrongQuestions];
+      startQuiz('retry', toRetry);
+    }
+
+    // =========================================================================
+    // 7. MINI-GAME: DUEL COCOKKAN PASANGAN KILAT
+    // =========================================================================
+    function startMatchGame() {
+      playSound('click');
+      clearInterval(gameState.matchTimer);
+
+      const selectedPairs = shuffleArray(MATCH_PAIRS_POOL).slice(0, 6);
+      const leftItems = shuffleArray(selectedPairs.map(p => ({ id: p.id, text: p.term })));
+      const rightItems = shuffleArray(selectedPairs.map(p => ({ id: p.id, text: p.desc })));
+
+      gameState.matchTimeLeft = 60;
+      gameState.matchScore = 0;
+      gameState.selectedLeft = null;
+      gameState.selectedRight = null;
+      gameState.matchedCount = 0;
+
+      document.getElementById('match-timer').textContent = '60d';
+      document.getElementById('match-score').textContent = '0';
+
+      const leftCol = document.getElementById('match-left-col');
+      const rightCol = document.getElementById('match-right-col');
+      leftCol.innerHTML = '';
+      rightCol.innerHTML = '';
+
+      leftItems.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.id = item.id;
+        btn.className = 'match-left-btn w-full p-3.5 rounded-2xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-left text-xs sm:text-sm font-bold text-cyan-200 transition';
+        btn.textContent = item.text;
+        btn.onclick = () => selectMatchCard('left', btn);
+        leftCol.appendChild(btn);
+      });
+
+      rightItems.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.id = item.id;
+        btn.className = 'match-right-btn w-full p-3.5 rounded-2xl bg-slate-900 border border-slate-700 hover:border-purple-400 text-left text-xs sm:text-sm text-slate-200 transition';
+        btn.textContent = item.text;
+        btn.onclick = () => selectMatchCard('right', btn);
+        rightCol.appendChild(btn);
+      });
+
+      switchScreen('screen-match');
+
+      gameState.matchTimer = setInterval(() => {
+        gameState.matchTimeLeft--;
+        document.getElementById('match-timer').textContent = `${gameState.matchTimeLeft}d`;
+        if (gameState.matchTimeLeft <= 0) {
+          clearInterval(gameState.matchTimer);
+          showToast(`⏰ Waktu habis! Skor Duel: ${gameState.matchScore}`);
+        }
+      }, 1000);
+    }
+
+    function selectMatchCard(side, btn) {
+      if (btn.disabled) return;
+      playSound('click');
+
+      if (side === 'left') {
+        document.querySelectorAll('.match-left-btn').forEach(b => b.classList.remove('ring-2', 'ring-cyan-400', 'bg-cyan-500/20'));
+        btn.classList.add('ring-2', 'ring-cyan-400', 'bg-cyan-500/20');
+        gameState.selectedLeft = btn;
+      } else {
+        document.querySelectorAll('.match-right-btn').forEach(b => b.classList.remove('ring-2', 'ring-purple-400', 'bg-purple-500/20'));
+        btn.classList.add('ring-2', 'ring-purple-400', 'bg-purple-500/20');
+        gameState.selectedRight = btn;
+      }
+
+      if (gameState.selectedLeft && gameState.selectedRight) {
+        const isMatch = gameState.selectedLeft.dataset.id === gameState.selectedRight.dataset.id;
+        const lBtn = gameState.selectedLeft;
+        const rBtn = gameState.selectedRight;
+        gameState.selectedLeft = null;
+        gameState.selectedRight = null;
+
+        if (isMatch) {
+          playSound('correct');
+          lBtn.disabled = true;
+          rBtn.disabled = true;
+          lBtn.className = 'w-full p-3.5 rounded-2xl bg-emerald-500/20 border border-emerald-400 text-left text-xs sm:text-sm font-bold text-emerald-300 opacity-75';
+          rBtn.className = 'w-full p-3.5 rounded-2xl bg-emerald-500/20 border border-emerald-400 text-left text-xs sm:text-sm text-emerald-200 opacity-75';
+
+          gameState.matchScore += 50;
+          gameState.totalPoints += 50;
+          gameState.matchedCount++;
+          document.getElementById('match-score').textContent = gameState.matchScore;
+
+          if (gameState.matchedCount === 6) {
+            clearInterval(gameState.matchTimer);
+            const timeBonus = gameState.matchTimeLeft * 5;
+            gameState.matchScore += timeBonus;
+            gameState.totalPoints += timeBonus;
+            document.getElementById('match-score').textContent = gameState.matchScore;
+            playSound('win');
+            launchConfetti();
+            showToast(`🎉 Luar Biasa! Semua cocok (+${timeBonus} bonus kecepatan)!`);
+          }
+        } else {
+          playSound('wrong');
+          lBtn.classList.add('animate-shake', 'border-rose-500');
+          rBtn.classList.add('animate-shake', 'border-rose-500');
+          setTimeout(() => {
+            lBtn.classList.remove('animate-shake', 'border-rose-500', 'ring-2', 'ring-cyan-400', 'bg-cyan-500/20');
+            rBtn.classList.remove('animate-shake', 'border-rose-500', 'ring-2', 'ring-purple-400', 'bg-purple-500/20');
+          }, 420);
+        }
+      }
+    }
+
+    // =========================================================================
+    // 8. ANIMASI KONFETI SELEBRASI
+    // =========================================================================
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#06b6d4', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e'];
+      const particles = Array.from({ length: 90 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 4 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.random() * 10 - 5
+      }));
+
+      let frame = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.r, p.r * 0.6);
+          p.y += p.d;
+          p.x += Math.sin(frame * 0.05 + p.tilt) * 1.5;
+        });
+        frame++;
+        if (frame < 130) {
+          requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      draw();
+    }
+  </script>
+</body>
+</html>
